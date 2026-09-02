@@ -1,10 +1,10 @@
 {
-  "name": "Rest Planner",
-  "short_name": "Rest Planner",
+  "name": "Rest Time",
+  "short_name": "Rest Time",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
+  "background_color": "#06101c",
+  "theme_color": "#06101c",
   "lang": "es",
   "icons": [
     {
