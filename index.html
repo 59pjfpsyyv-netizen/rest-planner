@@ -1,86 +1,52 @@
-<!doctype html><html lang="es"><head>
+<!doctype html>
+<html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Rest Planner">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
-<title>Rest Planner</title>
+<meta name="theme-color" content="#07111f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Rest Planner">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>Rest Planner</title>
 <style>
 :root{--bg:#07111f;--p:#101d30;--p2:#17263c;--line:#2b3d59;--txt:#f6f8fb;--mut:#a6b3c7;--acc:#70c3ff;--ok:#72dda0;--danger:#ff8c8c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}main{max-width:720px;margin:auto;padding:16px 14px 30px}
-header{padding:8px 3px 12px}h1{margin:0;font-size:28px}h2{margin:0 0 13px;font-size:18px}.sub,.note{color:var(--mut);font-size:13px}.card{background:var(--p);border:1px solid var(--line);border-radius:18px;padding:15px;margin:11px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
-label{display:block;color:var(--mut);font-size:12px;margin-bottom:6px}input{width:100%;height:48px;background:#0b1728;color:var(--txt);border:1px solid var(--line);border-radius:11px;padding:8px 10px;font-size:18px}
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:9px}.m input{display:none}.m span{display:block;text-align:center;background:#0b1728;border:1px solid var(--line);border-radius:11px;padding:13px 5px;font-weight:750}.m input:checked+span{background:#14334e;border-color:var(--acc)}
-button{width:100%;height:50px;border:0;border-radius:12px;background:var(--acc);font-weight:850;font-size:17px;color:#04101b}.secondary{background:var(--p2);color:var(--txt);border:1px solid var(--line)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.danger{background:#4a2028;color:#fff;border:1px solid #71343e}
-.error{display:none;margin-top:10px;padding:10px;border-radius:10px;background:#3a1b22;border:1px solid #71333d;color:var(--danger)}.hidden{display:none!important}
-.hero{text-align:center;padding:22px 10px}.status{color:var(--ok);font-weight:850;font-size:13px}.pilot{font-size:21px;font-weight:850;margin-top:7px}.clock{font-size:48px;font-weight:900;letter-spacing:1px;margin:5px 0}.range{font-size:14px;color:var(--mut)}.next{margin-top:14px;background:var(--p2);border-radius:13px;padding:12px}
-.restrow{display:flex;justify-content:space-between;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}.restrow:last-child{border-bottom:0}.active{color:var(--ok);font-weight:850}.small{font-size:12px;color:var(--mut)}.metricgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{background:var(--p2);border-radius:11px;padding:11px}.metric b{display:block;font-size:18px;margin-top:3px}
-footer{font-size:11px;color:#7d8da5;line-height:1.45;margin:14px 3px}@media(max-width:620px){.grid3,.metricgrid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.clock{font-size:44px}}
-</style></head><body><main>
-<header><h1>✈️ Rest Planner</h1><div class="sub">Planificador de descansos · PWA offline</div></header>
-
-<section class="card" id="setup">
-<h2>Configuración del vuelo</h2>
-<div class="grid"><div><label>Salida</label><input id="dep" type="time" value="22:30"></div><div><label>Llegada</label><input id="arr" type="time" value="10:15"></div></div>
-<div style="height:11px"></div><label>Tripulación</label>
-<div class="modes"><label class="m"><input name="pilots" type="radio" value="3" checked><span>3 pilotos<br>3 descansos</span></label><label class="m"><input name="pilots" type="radio" value="4"><span>4 pilotos<br>2 descansos</span></label></div>
-<div style="height:11px"></div>
-<div class="grid3"><div><label>Antes 1.º descanso (min)</label><input id="before" type="number" min="0" value="90"></div><div><label>Entre descansos (min)</label><input id="between" type="number" min="0" value="30"></div><div><label>Después último (min)</label><input id="after" type="number" min="0" value="90"></div></div>
-<div style="height:11px"></div><label>Identificación</label><div class="grid3"><input id="p1" value="CPT" aria-label="Piloto 1"><input id="p2" value="FO" aria-label="Piloto 2"><input id="p3" value="SO" aria-label="Piloto 3"></div>
-<p class="note">Para 4 pilotos se usan 2 periodos. Puedes editar los identificadores.</p>
-<div id="err" class="error"></div></section>
-
-<section class="card" id="preview"><div class="actions"><button id="calc">CALCULAR PLAN</button><button id="start" class="secondary">INICIAR VUELO</button></div></section>
-
-<section class="card hidden" id="live">
-<div class="hero"><div class="status" id="status">DESCANSO</div><div class="pilot" id="pilot">—</div><div class="clock" id="clock">00:00:00</div><div class="range" id="range">—</div><div class="next" id="next">—</div></div>
-<div class="actions"><button id="pause" class="secondary">PAUSAR</button><button id="finish" class="danger">FINALIZAR</button></div>
-</section>
-
-<section class="card hidden" id="planbox"><h2>Plan</h2><div class="metricgrid"><div class="metric"><span class="small">Duración vuelo</span><b id="fd">—</b></div><div class="metric"><span class="small">Descansos</span><b id="rc">—</b></div><div class="metric"><span class="small">Cada uno</span><b id="rd">—</b></div></div><div id="rows" style="margin-top:8px"></div></section>
-
-<footer>Uso orientativo. Verifica siempre FTL, OM-A/OM-B, SOP y procedimientos de tu operador. La app no sustituye la planificación operacional. Todos los cálculos se realizan localmente.</footer>
-</main>
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}.wrap{max-width:720px;margin:auto;padding:16px 14px 30px}header{padding:8px 3px 12px}h1{margin:0;font-size:28px}h2{margin:0 0 13px;font-size:18px}.sub,.note{color:var(--mut);font-size:13px}.card{background:var(--p);border:1px solid var(--line);border-radius:18px;padding:15px;margin:11px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}label{display:block;color:var(--mut);font-size:12px;margin-bottom:6px}input,select{width:100%;height:48px;background:#0b1728;color:var(--txt);border:1px solid var(--line);border-radius:11px;padding:8px 10px;font-size:18px}.modes{display:grid;grid-template-columns:1fr 1fr;gap:9px}.m input{display:none}.m span{display:block;text-align:center;background:#0b1728;border:1px solid var(--line);border-radius:11px;padding:13px 5px;font-weight:750}.m input:checked+span{background:#14334e;border-color:var(--acc)}
+button{width:100%;height:50px;border:0;border-radius:12px;background:var(--acc);font-weight:850;font-size:17px;color:#04101b}.secondary{background:var(--p2);color:var(--txt);border:1px solid var(--line)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.error{display:none;margin-top:10px;padding:10px;border-radius:10px;background:#3a1b22;border:1px solid #71333d;color:var(--danger)}.hidden{display:none!important}.hero{text-align:center;padding:19px 10px}.status{color:var(--ok);font-weight:850;font-size:13px}.pilot{font-size:22px;font-weight:850;margin-top:7px}.clock{font-size:48px;font-weight:900;letter-spacing:1px;margin:5px 0}.range{font-size:14px;color:var(--mut)}.next{margin-top:14px;background:var(--p2);border-radius:13px;padding:12px}.restrow{display:flex;justify-content:space-between;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}.restrow:last-child{border-bottom:0}.small{font-size:12px;color:var(--mut)}.metricgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{background:var(--p2);border-radius:11px;padding:11px}.metric b{display:block;font-size:18px;margin-top:3px}
+@media(max-width:620px){.grid3,.metricgrid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.clock{font-size:43px}}footer{font-size:11px;color:#7d8da5;line-height:1.45;margin:14px 3px}
+</style></head><body><div class="wrap">
+<header><h1>✈️ Rest Planner</h1><div class="sub">Planificador de descansos · funciona offline</div></header>
+<section class="card" id="setup"><h2>Planificación</h2>
+<div class="grid"><div><label>Hora de despegue prevista</label><input id="dep" type="time" value="22:30"></div><div><label>Hora de aterrizaje prevista</label><input id="arr" type="time" value="10:15"></div></div>
+<div style="height:11px"></div><label>Tripulación</label><div class="modes"><label class="m"><input name="pilots" type="radio" value="3" checked><span>3 pilotos<br>3 descansos</span></label><label class="m"><input name="pilots" type="radio" value="4"><span>4 pilotos<br>2 descansos</span></label></div>
+<div style="height:11px"></div><div class="grid3"><div><label>Después del despegue (min)</label><input id="before" type="number" min="0" value="30"></div><div><label>Entre descansos (min)</label><input id="between" type="number" min="0" value="15"></div><div><label>Antes del aterrizaje (min)</label><input id="after" type="number" min="0" value="30"></div></div>
+<div style="height:11px"></div><p class="note">Orden por defecto para 3 pilotos: FO al principio · CPT en medio · FO al final. Puedes cambiar cada periodo.</p>
+<div class="grid3"><div><label>Descanso 1</label><select id="r1"><option>FO</option><option>CPT</option><option>SO</option></select></div><div><label>Descanso 2</label><select id="r2"><option>CPT</option><option>FO</option><option>SO</option></select></div><div><label>Descanso 3</label><select id="r3"><option>FO</option><option>CPT</option><option>SO</option></select></div></div>
+<div class="error" id="err"></div></section>
+<section class="card"><div class="actions"><button id="calc">CALCULAR PLAN</button><button id="real" class="secondary">AJUSTAR DESPEGUE REAL</button></div></section>
+<section class="card hidden" id="actual"><h2>Despegue real</h2><div class="grid"><div><label>Hora real de despegue</label><input id="realTime" type="time"></div><div><label>Estado</label><input id="state" readonly value="Pendiente"></div></div><div style="height:9px"></div><button id="apply">APLICAR HORA REAL</button><p class="note">Se usa una vez después del despegue si la hora real difiere de la prevista. El plan se desplaza automáticamente.</p></section>
+<section class="card hidden" id="live"><div class="hero"><div class="status" id="status">—</div><div class="pilot" id="pilot">—</div><div class="clock" id="clock">00:00:00</div><div class="range" id="range">—</div><div class="next" id="next">—</div></div></section>
+<section class="card hidden" id="planbox"><h2>Plan calculado</h2><div class="metricgrid"><div class="metric"><span class="small">Duración vuelo</span><b id="fd">—</b></div><div class="metric"><span class="small">Descansos</span><b id="rc">—</b></div><div class="metric"><span class="small">Cada uno</span><b id="rd">—</b></div></div><div id="rows"></div></section>
+<footer>Herramienta de apoyo. Verifica siempre FTL, OM-A/OM-B, SOP y procedimientos de tu operador. No sustituye la planificación operacional. Los datos y cálculos permanecen localmente.</footer>
+</div>
 <script>
-(function(){
-const $=id=>document.getElementById(id), key="restPlannerState";
-let plan=null,running=false,paused=false,timer=null,startedAt=0,pausedAt=0,elapsedBefore=0;
-function mins(v){let a=v.split(":").map(Number);return a.length===2?a[0]*60+a[1]:NaN}
+(()=>{"use strict";
+const $=id=>document.getElementById(id),KEY="restPlannerV4";let plan=null,timer=null;
+function mins(v){let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN}
 function tm(x){x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")}
 function dd(x){x=Math.max(0,Math.round(x));return Math.floor(x/60)+" h "+String(x%60).padStart(2,"0")+" min"}
-function secfmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
-function err(s){$("err").textContent=s;$("err").style.display="block"}function noerr(){$("err").style.display="none"}
-function calc(){
- noerr();let d=mins($("dep").value),a=mins($("arr").value),b=+$("before").value,g=+$("between").value,e=+$("after").value;
- let n=+document.querySelector('input[name=pilots]:checked').value===3?3:2;
- if(!Number.isFinite(d)||!Number.isFinite(a)||[b,g,e].some(x=>!Number.isFinite(x)||x<0))return err("Revisa las horas y los tiempos.");
- let f=a-d;if(f<=0)f+=1440;let usable=f-b-e-(n-1)*g;if(usable<=0)return err("No hay tiempo suficiente para colocar los descansos.");
- let r=usable/n,st=d+b,rests=[],ids=[$("p1").value||"CPT",$("p2").value||"FO",$("p3").value||"SO"];
- for(let i=0;i<n;i++){rests.push({start:st,end:st+r,pilot:ids[i%ids.length]});st+=r+g}
- plan={dep:d,arr:a,flight:f,rest:r,rests}; renderPlan();save();return true;
-}
-function renderPlan(){
- $("fd").textContent=dd(plan.flight);$("rc").textContent=plan.rests.length;$("rd").textContent=dd(plan.rest);
- $("rows").innerHTML=plan.rests.map((r,i)=>`<div class="restrow"><div><b>Descanso ${i+1}</b><br><span class="small">${r.pilot}</span></div><div style="text-align:right"><b>${tm(r.start)} → ${tm(r.end)}</b><br><span class="small">${dd(plan.rest)}</span></div></div>`).join("");
- $("planbox").classList.remove("hidden");
-}
-function save(){localStorage.setItem(key,JSON.stringify({plan,dep:$("dep").value,arr:$("arr").value,b:$("before").value,g:$("between").value,e:$("after").value,p1:$("p1").value,p2:$("p2").value,p3:$("p3").value}))}
-function load(){try{let s=JSON.parse(localStorage.getItem(key));if(!s)return;["dep","arr"].forEach(k=>$(k).value=s[k]||$(k).value);$("before").value=s.b||90;$("between").value=s.g||30;$("after").value=s.e||90;$("p1").value=s.p1||"CPT";$("p2").value=s.p2||"FO";$("p3").value=s.p3||"SO";if(s.plan){plan=s.plan;renderPlan()}}catch(e){}}
-function elapsed(){return running?(paused?pausedAt-startedAt-elapsedBefore:(Date.now()-startedAt-elapsedBefore)):0}
-function update(){
- if(!running||!plan)return;let sec=Math.floor(elapsed()/1000),min=sec/60;
- let active=-1,next=-1;
- plan.rests.forEach((r,i)=>{if(min>=r.start-plan.dep&&min<r.end-plan.dep)active=i;else if(next<0&&min<r.start-plan.dep)next=i});
- if(active>=0){let r=plan.rests[active],rem=(r.end-r.start)*60-(min-(r.start-plan.dep))*60;$("status").textContent="DESCANSO "+(active+1);$("pilot").textContent=r.pilot;$("clock").textContent=secfmt(rem);$("range").textContent=tm(r.start)+" → "+tm(r.end);$("next").textContent=next>=0?"Siguiente: descanso "+(next+1)+" a las "+tm(plan.rests[next].start):"Último descanso del plan"}
- else if(next>=0){let r=plan.rests[next],rem=(r.start-plan.dep)*60-min*60;$("status").textContent="EN VUELO";$("pilot").textContent="Próximo descanso: "+r.pilot;$("clock").textContent=secfmt(rem);$("range").textContent="Descanso "+(next+1)+" · "+tm(r.start)+" → "+tm(r.end);$("next").textContent="Preparar relevo"}
- else{$("status").textContent="PLAN COMPLETADO";$("pilot").textContent="—";$("clock").textContent="00:00:00";$("range").textContent="";$("next").textContent="Puedes finalizar el vuelo"}
-}
-function start(){
- if(!plan&&!calc())return;running=true;paused=false;elapsedBefore=0;startedAt=Date.now();$("setup").classList.add("hidden");$("preview").classList.add("hidden");$("live").classList.remove("hidden");update();if(timer)clearInterval(timer);timer=setInterval(update,500);
-}
-function pause(){if(!running)return;if(!paused){pausedAt=Date.now();paused=true;$("pause").textContent="REANUDAR"}else{elapsedBefore+=Date.now()-pausedAt;paused=false;$("pause").textContent="PAUSAR"}update()}
-function finish(){running=false;paused=false;if(timer)clearInterval(timer);$("live").classList.add("hidden");$("setup").classList.remove("hidden");$("preview").classList.remove("hidden");$("pause").textContent="PAUSAR"}
-$("calc").onclick=calc;$("start").onclick=start;$("pause").onclick=pause;$("finish").onclick=finish;
-document.querySelectorAll("input").forEach(x=>x.addEventListener("input",()=>{if(!running)calc()}));
-load();if(!plan)calc();
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+function sf(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function show(s){$("err").textContent=s;$("err").style.display="block"}function hide(){$("err").style.display="none"}
+function calculate(keepReal){hide();let d=mins($("dep").value),a=mins($("arr").value),b=+$("before").value,g=+$("between").value,e=+$("after").value,n=+document.querySelector('input[name="pilots"]:checked').value===3?3:2;
+if(!Number.isFinite(d)||!Number.isFinite(a)||[b,g,e].some(x=>!Number.isFinite(x)||x<0))return show("Revisa las horas y los tiempos.");
+let f=a-d;if(f<=0)f+=1440;let usable=f-b-e-(n-1)*g;if(usable<=0)return show("No hay tiempo suficiente para colocar los descansos.");
+let r=usable/n,st=d+b,ids=[$("r1").value,$("r2").value,$("r3").value],rests=[];for(let i=0;i<n;i++){rests.push({start:st,end:st+r,pilot:ids[i]});st+=r+g}
+let real=keepReal&&plan&&plan.realDep!=null?plan.realDep:null;plan={dep:d,arr:a,flight:f,rest:r,rests,realDep:real};render();save();update()}
+function render(){$("fd").textContent=dd(plan.flight);$("rc").textContent=plan.rests.length;$("rd").textContent=dd(plan.rest);$("rows").innerHTML=plan.rests.map((r,i)=>`<div class="restrow"><div><b>Descanso ${i+1}</b><br><span class="small">${r.pilot}</span></div><div style="text-align:right"><b>${tm(r.start+(plan.realDep==null?0:plan.realDep-plan.dep))} → ${tm(r.end+(plan.realDep==null?0:plan.realDep-plan.dep))}</b><br><span class="small">${dd(plan.rest)}</span></div></div>`).join("");$("planbox").classList.remove("hidden");if(plan.realDep!=null){$("actual").classList.remove("hidden");$("realTime").value=tm(plan.realDep);$("state").value="Aplicado"}}
+function save(){localStorage.setItem(KEY,JSON.stringify({plan,dep:$("dep").value,arr:$("arr").value,b:$("before").value,g:$("between").value,e:$("after").value,r1:$("r1").value,r2:$("r2").value,r3:$("r3").value,pilots:[...document.querySelectorAll('input[name="pilots"]')].find(x=>x.checked)?.value||"3"}))}
+function load(){try{let s=JSON.parse(localStorage.getItem(KEY));if(!s)return;["dep","arr"].forEach(k=>$(k).value=s[k]||$(k).value);$("before").value=s.b??30;$("between").value=s.g??15;$("after").value=s.e??30;["r1","r2","r3"].forEach(k=>{if(s[k])$(k).value=s[k]});if(s.pilots)document.querySelector('input[name="pilots"][value="'+s.pilots+'"]').checked=true;if(s.plan){plan=s.plan;render()}}catch(e){}}
+function update(){if(!plan)return;let d=new Date(),now=d.getHours()*60+d.getMinutes()+d.getSeconds()/60,base=plan.realDep!=null?plan.realDep:plan.dep,t=now;if(t<base)t+=1440;let rel=t-base,active=-1,next=-1;plan.rests.forEach((r,i)=>{let s=r.start-plan.dep,e=r.end-plan.dep;if(rel>=s&&rel<e)active=i;else if(next<0&&rel<s)next=i});$("live").classList.remove("hidden");
+if(rel<0){$("status").textContent="EN ESPERA";$("pilot").textContent="Despegue a las "+tm(base);$("clock").textContent=sf(-rel*60);$("range").textContent="";$("next").textContent="El plan comenzará automáticamente al despegue"}
+else if(active>=0){let r=plan.rests[active],rem=(r.end-r.start)*60-(rel-(r.start-plan.dep))*60;$("status").textContent="DESCANSO "+(active+1);$("pilot").textContent=r.pilot;$("clock").textContent=sf(rem);$("range").textContent=tm(r.start+(base-plan.dep))+" → "+tm(r.end+(base-plan.dep));$("next").textContent=next>=0?"Siguiente: descanso "+(next+1)+" · "+tm(plan.rests[next].start+(base-plan.dep)):"Último descanso del plan"}
+else if(next>=0){let r=plan.rests[next],rem=(r.start-plan.dep-rel)*60;$("status").textContent="EN VUELO";$("pilot").textContent="Próximo descanso: "+r.pilot;$("clock").textContent=sf(rem);$("range").textContent=tm(r.start+(base-plan.dep))+" → "+tm(r.end+(base-plan.dep));$("next").textContent="No es necesario pulsar nada"}
+else{$("status").textContent="PLAN COMPLETADO";$("pilot").textContent="—";$("clock").textContent="00:00:00";$("range").textContent="";$("next").textContent="Vuelo finalizado según el horario introducido"}}
+$("calc").onclick=()=>calculate(false);
+$("real").onclick=()=>{if(!plan)calculate(false);$("actual").classList.remove("hidden");let d=new Date();$("realTime").value=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");$("state").value="Listo para aplicar"};
+$("apply").onclick=()=>{if(!plan)return;let x=mins($("realTime").value);if(!Number.isFinite(x))return show("Introduce la hora real de despegue.");plan.realDep=x;render();save();update()};
+load();if(!plan)calculate(false);update();timer=setInterval(update,1000);if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 })();
 </script></body></html>
