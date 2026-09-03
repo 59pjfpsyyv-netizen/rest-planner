@@ -141,7 +141,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV18";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV19";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -207,6 +207,6 @@ else if(active>=0){let r=plan.rests[active];$("status").textContent="REST "+(act
 else if(next>=0){let r=plan.rests[next];$("status").textContent="FLIGHT";$("pilot").textContent="NEXT REST "+r.pilot;$("clock").textContent=sf((r.start-t)*60);$("range").textContent=tm(r.start)+" — "+tm(r.end)+" UTC · "+fmtDur(r.end-r.start)+" REST";$("next").textContent=""}
 else{$("status").textContent="PLAN COMPLETE";$("pilot").textContent="";$("clock").textContent="00:00:00";$("range").textContent="";$("next").textContent=""}}
 $("calc").onclick=calculate;document.querySelectorAll('input[name="pilots"]').forEach(x=>x.addEventListener("change",()=>{setCrewMode();save()}));
-$("crewGrid").addEventListener("change",e=>{if(e.target&&/^r[123]$/.test(e.target.id))toggleCustom(+e.target.id.slice(1));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};load();setCrewMode();applyTheme();if(!plan)calculate();update();setInterval(update,1000);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+document.addEventListener("change",e=>{if(e.target&&/^r[123]$/.test(e.target.id))toggleCustom(+e.target.id.slice(1));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};load();setCrewMode();applyTheme();if(!plan)calculate();update();setInterval(update,1000);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
-</script><div id="appVersion">v17</div></body></html>
+</script><div id="appVersion">v19</div></body></html>
