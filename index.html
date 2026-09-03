@@ -27,11 +27,17 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
   .grid input[type="time"] { font-size: 16px; }
 }
 </style>
-</head><body><div class="wrap">
+<style>
+.flight-times{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;width:100%;max-width:100%}
+.time-field{min-width:0;width:100%;max-width:100%;overflow:hidden}
+.time-input-wrap{min-width:0;width:100%;max-width:100%;overflow:hidden}
+.flight-times input[type=time]{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0}
+@media(max-width:600px){.flight-times{gap:6px}.flight-times input[type=time]{font-size:16px}}
+</style></head><body><div class="wrap">
 <div class="top"><div><div class="title">REST CALCULATOR</div><div class="sub">FLIGHT REST MANAGEMENT</div></div><div style="display:flex;align-items:center;gap:8px"><button id="theme" style="width:auto;padding:0 12px;height:34px">LIGHT</button><div class="sub">UTC</div></div></div>
 
 <section class="card"><h2>FLIGHT DATA · ALL TIMES UTC</h2>
-<div class="grid"><div><label>DEPARTURE · UTC</label><input id="dep" type="time" value="15:00"></div><div><label>ARRIVAL · UTC</label><input id="arr" type="time" value="01:00"></div></div>
+<div class="flight-times"><div class="time-field"><label>DEPARTURE · UTC</label><div class="time-input-wrap"><input id="dep" type="time" value="15:00"></div></div><div class="time-field"><label>ARRIVAL · UTC</label><div class="time-input-wrap"><input id="arr" type="time" value="01:00"></div></div></div>
 <div style="height:10px"></div><label>CREW</label><div class="modes"><label><input name="pilots" type="radio" value="3" checked><span>3 PILOTS · 3 RESTS</span></label><label><input name="pilots" type="radio" value="4"><span>4 PILOTS · 2 RESTS</span></label></div>
 <div style="height:10px"></div><div class="grid3"><div><label>AFTER TAKEOFF · MIN</label><input id="before" type="number" min="0" value="30"></div><div><label>BETWEEN RESTS · MIN</label><input id="between" type="number" min="0" value="15"></div><div><label>BEFORE LANDING · MIN</label><input id="after" type="number" min="0" value="30"></div></div>
 <div style="height:10px"></div><div class="grid3" id="crewGrid">
@@ -50,7 +56,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV15";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV16";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
