@@ -111,6 +111,10 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 .flight-time-card .time-box input[type="time"]::-webkit-date-and-time-value{
   text-align:center;
 }
+</style><style>
+body.light .flight-time-card .time-box{background:#fff;border-color:#d8dbe2}
+body.light .flight-time-card .time-box input[type=time]{color:#20242a;-webkit-text-fill-color:#20242a;color-scheme:light}
+body:not(.light) .flight-time-card .time-box input[type=time]{color-scheme:dark}
 </style></head><body><div class="wrap">
 <div class="top"><div><div class="title">REST CALCULATOR</div><div class="sub">FLIGHT REST MANAGEMENT</div></div><div style="display:flex;align-items:center;gap:8px"><button id="theme" style="width:auto;padding:0 12px;height:34px">LIGHT</button><div class="sub">UTC</div></div></div>
 
@@ -153,14 +157,14 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </section>
 <section class="card"><button class="primary" id="calc">RECALCULATE PLAN</button></section>
 
-<section class="card hidden" id="live"><div class="mfd"><div class="mfdhead"><span>REST TIME</span><span id="mfdclock">--:--:-- UTC</span></div><div class="mfdmain"><div class="state" id="status">—</div><div class="pilot" id="pilot">—</div><div class="big" id="clock">00:00:00</div><div class="range" id="range">—</div><div class="utc">ALL COUNTDOWNS REFER TO UTC</div><div class="next" id="next"></div></div></div></section>
+<section class="card hidden" id="live"><div class="mfd"><div class="mfdhead"><span>REST TIME</span><span id="mfdclock">--:--:-- UTC</span></div><div class="mfdmain"><div class="state" id="status">—</div><div class="pilot" id="pilot">—</div><div class="big" id="clock">00:00:00</div><div class="range" id="range">—</div><div class="utc"></div><div class="next" id="next"></div></div></div></section>
 
 <section class="card hidden" id="planbox"><h2>REST PLAN · UTC</h2><div id="durationLine" style="font-size:11px;color:var(--mut);margin:-3px 0 8px">REST DURATION · —</div><div id="rows"></div></section>
 
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV23";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV24";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -230,4 +234,4 @@ try{update()}catch(e){}
 setInterval(()=>{try{update()}catch(e){}},1000);
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
-</script><div id="appVersion">v23</div></body></html>
+</script><div id="appVersion">v24</div></body></html>
