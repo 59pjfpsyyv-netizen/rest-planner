@@ -9,7 +9,25 @@
 .row{display:grid;grid-template-columns:65px 1fr 1fr 1.2fr;gap:7px;padding:10px 4px;border-top:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;align-items:center}.row .p{color:var(--cyan);font-weight:800}.count{font-weight:900;text-align:right}.waiting{color:var(--amber)}.active{color:var(--green)}.done{color:#6f8193}.footer{font-size:10px;color:#687d91;line-height:1.4;margin:12px 3px}
 body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--cyan:#b4002d;--green:#19734a;--amber:#9b4d00;--red:#a30000}body.light .mfd{background:#fff;border-color:#b9b1a9}body.light input,body.light select{background:#faf8f5;color:#222}body.light .modes span{background:#faf8f5}body.light .modes input:checked+span{background:#f5e7ea;border-color:#b4002d}body.light button{background:#f7e6e9;color:#a9002b;border-color:#d3b8be}body.light .primary{background:#b4002d;color:#fff;border-color:#b4002d}.customName{height:38px;font-size:14px}
 @media(max-width:600px){.grid3{grid-template-columns:1fr}.row{grid-template-columns:52px 1fr 1fr 1.3fr;font-size:11px}.big{font-size:38px}}
-</style></head><body><div class="wrap">
+</style>
+<style>
+/* iPhone/iOS: keep native time controls inside their grid cells */
+.grid > div { min-width: 0; width: 100%; }
+.grid input[type="time"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .grid > div { min-width: 0; }
+  .grid input[type="time"] { font-size: 16px; }
+}
+</style>
+</head><body><div class="wrap">
 <div class="top"><div><div class="title">REST CALCULATOR</div><div class="sub">FLIGHT REST MANAGEMENT</div></div><div style="display:flex;align-items:center;gap:8px"><button id="theme" style="width:auto;padding:0 12px;height:34px">LIGHT</button><div class="sub">UTC</div></div></div>
 
 <section class="card"><h2>FLIGHT DATA · ALL TIMES UTC</h2>
@@ -32,7 +50,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV14";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV15";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
