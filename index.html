@@ -32,7 +32,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV11";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV12";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -43,20 +43,28 @@ function toggleCustom(i){
 let s=$("r"+i),c=$("c"+i); if(!s||!c)return;
 c.classList.toggle("hidden",s.value!=="CUSTOM");
 }
+function toggleCustom(i){
+let s=$("r"+i),c=$("c"+i); if(!s||!c)return;
+c.classList.toggle("hidden",s.value!=="CUSTOM");
+}
 function setCrewMode(){
 let four=+document.querySelector('input[name="pilots"]:checked').value===4;
+let old={};for(let i=1;i<=3;i++){old["r"+i]=$("r"+i)?.value;old["c"+i]=$("c"+i)?.value||""}
 $("rest3wrap").classList.toggle("hidden",four);
 if(four){
 $("r1").innerHTML='<option>CREW 1</option><option>CREW 2</option>';
 $("r2").innerHTML='<option>CREW 1</option><option>CREW 2</option>';
-$("r1").value="CREW 1";$("r2").value="CREW 2";
+$("r1").value=(old.r1==="CREW 2")?"CREW 2":"CREW 1";
+$("r2").value=(old.r2==="CREW 1")?"CREW 1":"CREW 2";
 for(let i=1;i<=3;i++)if($("c"+i)){$("c"+i).value="";$("c"+i).classList.add("hidden")}
 }else{
+for(let i=1;i<=3;i++)$("r"+i).innerHTML='<option>FO</option><option>CPT</option><option>CUSTOM</option>';
 for(let i=1;i<=3;i++){
-$("r"+i).innerHTML='<option>FO</option><option>CPT</option><option>CUSTOM</option>';
+let v=old["r"+i];
+$("r"+i).value=["FO","CPT","CUSTOM"].includes(v)?v:(i===2?"CPT":"FO");
+$("c"+i).value=old["c"+i]||"";
+toggleCustom(i);
 }
-$("r1").value="FO";$("r2").value="CPT";$("r3").value="FO";
-for(let i=1;i<=3;i++){ $("c"+i).value=""; toggleCustom(i); }
 }
 }
 function crewValue(i){
@@ -66,7 +74,7 @@ return s.value==="CUSTOM"?(($("c"+i).value||"").trim()||"CUSTOM"):s.value;
 function applyTheme(){
 let light=localStorage.getItem("restThemeV8")==="light";document.body.classList.toggle("light",light);$("theme").textContent=light?"DARK":"LIGHT";
 }
-function calculate(){clearErr();setCrewMode();let d=mins($("dep").value),a=mins($("arr").value),b=+$("before").value,g=+$("between").value,e=+$("after").value,n=+document.querySelector('input[name="pilots"]:checked').value===3?3:2,ids=[crewValue(1),crewValue(2),crewValue(3)];if(ids.some((x,i)=>i< (n) && (!x||x==="CUSTOM")))return err("ENTER A CUSTOM CREW NAME");if(!Number.isFinite(d)||!Number.isFinite(a)||[b,g,e].some(x=>!Number.isFinite(x)||x<0))return err("CHECK FLIGHT DATA");try{plan=build(d,a,n,b,g,e,ids);render();save();update()}catch(x){err(x.message)}}
+function calculate(){clearErr();let d=mins($("dep").value),a=mins($("arr").value),b=+$("before").value,g=+$("between").value,e=+$("after").value,n=+document.querySelector('input[name="pilots"]:checked').value===3?3:2,ids=[crewValue(1),crewValue(2),crewValue(3)];if(ids.some((x,i)=>i< (n) && (!x||x==="CUSTOM")))return err("ENTER A CUSTOM CREW NAME");if(!Number.isFinite(d)||!Number.isFinite(a)||[b,g,e].some(x=>!Number.isFinite(x)||x<0))return err("CHECK FLIGHT DATA");try{plan=build(d,a,n,b,g,e,ids);render();save();update()}catch(x){err(x.message)}}
 function render(){$("durationLine").textContent="REST DURATION · "+fmtDur(plan.rest);$("rows").innerHTML=plan.rests.map((r,i)=>`<div class="row"><div class="p">${r.pilot}</div><div>${tm(r.start)}</div><div>${tm(r.end)}</div><div class="count" id="cnt${i}">--:--:--</div></div>`).join("");$("planbox").classList.remove("hidden");$("live").classList.remove("hidden")}
 function save(){localStorage.setItem(KEY,JSON.stringify({plan,dep:$("dep").value,arr:$("arr").value,b:$("before").value,g:$("between").value,e:$("after").value,pilots:[...document.querySelectorAll('input[name="pilots"]')].find(x=>x.checked)?.value||"3"}))}
 function load(){try{let s=JSON.parse(localStorage.getItem(KEY));if(!s)return;for(let k of ["dep","arr"])$(k).value=s[k]||$(k).value;$("before").value=s.b??30;$("between").value=s.g??15;$("after").value=s.e??30;if(s.pilots)document.querySelector('input[name="pilots"][value="'+s.pilots+'"]').checked=true;if(s.plan){plan=s.plan;render()}}catch(e){}}
@@ -85,6 +93,6 @@ else if(active>=0){let r=plan.rests[active];$("status").textContent="REST "+(act
 else if(next>=0){let r=plan.rests[next];$("status").textContent="FLIGHT";$("pilot").textContent="NEXT REST "+r.pilot;$("clock").textContent=sf((r.start-t)*60);$("range").textContent=tm(r.start)+" — "+tm(r.end)+" UTC · "+fmtDur(r.end-r.start)+" REST";$("next").textContent=""}
 else{$("status").textContent="PLAN COMPLETE";$("pilot").textContent="";$("clock").textContent="00:00:00";$("range").textContent="";$("next").textContent=""}}
 $("calc").onclick=calculate;document.querySelectorAll('input[name="pilots"]').forEach(x=>x.addEventListener("change",()=>{setCrewMode();save()}));
-[1,2,3].forEach(i=>{let s=$("r"+i);if(s)s.addEventListener("change",()=>toggleCustom(i));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};load();setCrewMode();applyTheme();if(!plan)calculate();update();setInterval(update,1000);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+$("crewGrid").addEventListener("change",e=>{if(e.target&&/^r[123]$/.test(e.target.id))toggleCustom(+e.target.id.slice(1));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};load();setCrewMode();applyTheme();if(!plan)calculate();update();setInterval(update,1000);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
 </script></body></html>
