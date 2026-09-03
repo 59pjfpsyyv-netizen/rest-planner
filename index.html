@@ -33,11 +33,63 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 .time-input-wrap{min-width:0;width:100%;max-width:100%;overflow:hidden}
 .flight-times input[type=time]{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0}
 @media(max-width:600px){.flight-times{gap:6px}.flight-times input[type=time]{font-size:16px}}
+</style><style>
+/* V17: isolated flight-time cards */
+.flight-time-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+}
+.flight-time-card{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+.flight-time-card label{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+}
+.flight-time-card input[type="time"]{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  margin:0;
+}
+#appVersion{
+  text-align:center;
+  font-size:9px;
+  line-height:12px;
+  opacity:.35;
+  margin:10px 0 4px;
+  letter-spacing:.4px;
+}
+@media(max-width:600px){
+  .flight-time-grid{gap:6px}
+  .flight-time-card input[type="time"]{font-size:16px}
+}
 </style></head><body><div class="wrap">
 <div class="top"><div><div class="title">REST CALCULATOR</div><div class="sub">FLIGHT REST MANAGEMENT</div></div><div style="display:flex;align-items:center;gap:8px"><button id="theme" style="width:auto;padding:0 12px;height:34px">LIGHT</button><div class="sub">UTC</div></div></div>
 
 <section class="card"><h2>FLIGHT DATA · ALL TIMES UTC</h2>
-<div class="flight-times"><div class="time-field"><label>DEPARTURE · UTC</label><div class="time-input-wrap"><input id="dep" type="time" value="15:00"></div></div><div class="time-field"><label>ARRIVAL · UTC</label><div class="time-input-wrap"><input id="arr" type="time" value="01:00"></div></div></div>
+<div class="flight-time-grid">
+  <div class="flight-time-card">
+    <label>DEPARTURE · UTC</label>
+    <input id="dep" type="time" value="15:00">
+  </div>
+  <div class="flight-time-card">
+    <label>ARRIVAL · UTC</label>
+    <input id="arr" type="time" value="01:00">
+  </div>
+</div>
 <div style="height:10px"></div><label>CREW</label><div class="modes"><label><input name="pilots" type="radio" value="3" checked><span>3 PILOTS · 3 RESTS</span></label><label><input name="pilots" type="radio" value="4"><span>4 PILOTS · 2 RESTS</span></label></div>
 <div style="height:10px"></div><div class="grid3"><div><label>AFTER TAKEOFF · MIN</label><input id="before" type="number" min="0" value="30"></div><div><label>BETWEEN RESTS · MIN</label><input id="between" type="number" min="0" value="15"></div><div><label>BEFORE LANDING · MIN</label><input id="after" type="number" min="0" value="30"></div></div>
 <div style="height:10px"></div><div class="grid3" id="crewGrid">
@@ -56,7 +108,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV16";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV17";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -124,4 +176,4 @@ else{$("status").textContent="PLAN COMPLETE";$("pilot").textContent="";$("clock"
 $("calc").onclick=calculate;document.querySelectorAll('input[name="pilots"]').forEach(x=>x.addEventListener("change",()=>{setCrewMode();save()}));
 $("crewGrid").addEventListener("change",e=>{if(e.target&&/^r[123]$/.test(e.target.id))toggleCustom(+e.target.id.slice(1));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};load();setCrewMode();applyTheme();if(!plan)calculate();update();setInterval(update,1000);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
-</script></body></html>
+</script><div id="appVersion">v17</div></body></html>
