@@ -125,8 +125,19 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
     <div class="time-box"><input id="arr" type="time" value="01:00"></div>
   </div>
 </div>
+<div style="height:10px"></div>
+<div class="modes">
+  <label style="margin:0">
+    <input type="radio" name="pilots" value="3" checked>
+    <span>3 PILOTS · 3 RESTS</span>
+  </label>
+  <label style="margin:0">
+    <input type="radio" name="pilots" value="4">
+    <span>4 PILOTS · 2 RESTS</span>
+  </label>
+</div>
 <div style="height:10px"></div><div class="grid3" id="crewGrid">
-<div><label>REST 1</label><select id="r1"><option>FO</option><option selected>CPT</option><option>CUSTOM</option></select><input id="c1" class="customName hidden" placeholder="Nombre" maxlength="24" style="margin-top:6px"></div>
+<div><label>REST 1</label><select id="r1"><option selected>FO</option><option>CPT</option><option>CUSTOM</option></select><input id="c1" class="customName hidden" placeholder="Nombre" maxlength="24" style="margin-top:6px"></div>
 <div><label>REST 2</label><select id="r2"><option>FO</option><option selected>CPT</option><option>CUSTOM</option></select><input id="c2" class="customName hidden" placeholder="Nombre" maxlength="24" style="margin-top:6px"></div>
 <div id="rest3wrap"><label>REST 3</label><select id="r3"><option selected>FO</option><option>CPT</option><option>CUSTOM</option></select><input id="c3" class="customName hidden" placeholder="Nombre" maxlength="24" style="margin-top:6px"></div>
 </div>
@@ -149,7 +160,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV22";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV23";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -219,4 +230,4 @@ try{update()}catch(e){}
 setInterval(()=>{try{update()}catch(e){}},1000);
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
-</script><div id="appVersion">v22</div></body></html>
+</script><div id="appVersion">v23</div></body></html>
