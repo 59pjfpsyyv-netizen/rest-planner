@@ -6,7 +6,7 @@
 :root{--bg:#06101c;--panel:#0b1827;--line:#294058;--txt:#eef5fb;--mut:#91a5bb;--cyan:#6fd7ff;--green:#76e0a0;--amber:#ffd477;--red:#ff8888}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:760px;margin:auto;padding:12px}.top{display:flex;justify-content:space-between;align-items:end;padding:5px 3px 11px;border-bottom:1px solid var(--line)}.title{font-size:25px;font-weight:800;letter-spacing:.8px}.sub{font-size:11px;color:var(--mut);letter-spacing:.8px}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;margin-top:10px}h2{font-size:14px;letter-spacing:.7px;margin:0 0 10px}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.grid>div{min-width:0;overflow:hidden}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}label{display:block;font-size:10px;color:var(--mut);letter-spacing:.4px;margin-bottom:5px}input,select{box-sizing:border-box;width:100%;max-width:100%;min-width:0;height:44px;border-radius:8px;border:1px solid var(--line);background:#071522;color:var(--txt);padding:7px 9px;font-size:17px}button{height:44px;border-radius:8px;border:1px solid var(--line);background:#102b40;color:var(--cyan);font-weight:800;letter-spacing:.5px;width:100%}.primary{background:#17435a}.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modes input{display:none}.modes span{display:block;text-align:center;padding:10px 4px;border:1px solid var(--line);border-radius:8px;background:#071522;font-size:13px;font-weight:800}.modes input:checked+span{border-color:var(--cyan);background:#0e2b3d}.error{display:none;color:var(--red);font-size:12px;margin-top:8px}.hidden{display:none!important}
 .mfd{background:#02070b;border:2px solid #243b4d;border-radius:9px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.mfdhead{display:flex;justify-content:space-between;color:#8aa0b4;font-size:11px;border-bottom:1px solid #233747;padding-bottom:7px}.mfdmain{text-align:center;padding:15px 5px 10px}.state{color:var(--green);font-size:12px;font-weight:900;letter-spacing:1px}.pilot{color:var(--cyan);font-size:24px;font-weight:900;margin:8px 0}.big{font-size:43px;font-weight:900;letter-spacing:2px}.range{font-size:13px;color:#a9bac9;margin-top:4px}.utc{color:var(--amber);font-size:11px;margin-top:4px}.next{margin-top:12px;border-top:1px solid #233747;padding-top:10px;color:#9db1c3;font-size:12px}
-.row{display:grid;grid-template-columns:65px 1fr 1fr 1.2fr;gap:7px;padding:10px 4px;border-top:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;align-items:center}.row .p{color:var(--cyan);font-weight:800}.count{font-weight:900;text-align:right}.waiting{color:var(--amber)}.active{color:var(--green)}.done{color:#6f8193}.footer{font-size:10px;color:#687d91;line-height:1.4;margin:12px 3px}
+.row{display:grid;grid-template-columns:minmax(82px,1.15fr) 1fr 1fr 1.2fr;gap:7px;padding:10px 4px;border-top:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;align-items:center}.row .p{color:var(--cyan);font-weight:800;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.count{font-weight:900;text-align:right}.waiting{color:var(--amber)}.active{color:var(--green)}.done{color:#6f8193}.footer{font-size:10px;color:#687d91;line-height:1.4;margin:12px 3px}
 body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--cyan:#b4002d;--green:#19734a;--amber:#9b4d00;--red:#a30000}body.light .mfd{background:#fff;border-color:#b9b1a9}body.light input,body.light select{background:#faf8f5;color:#222}body.light .modes span{background:#faf8f5}body.light .modes input:checked+span{background:#f5e7ea;border-color:#b4002d}body.light button{background:#f7e6e9;color:#a9002b;border-color:#d3b8be}body.light .primary{background:#b4002d;color:#fff;border-color:#b4002d}.customName{height:38px;font-size:14px}
 @media(max-width:600px){.grid3{grid-template-columns:1fr}.row{grid-template-columns:52px 1fr 1fr 1.3fr;font-size:11px}.big{font-size:38px}}
 </style>
@@ -37,7 +37,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
 /* V17: isolated flight-time cards */
 .flight-time-grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:minmax(0,1fr) minmax(0,.82fr) minmax(0,1fr);
   gap:8px;
   width:100%;
   max-width:100%;
@@ -73,7 +73,7 @@ body.light{--bg:#f4f1ed;--panel:#fff;--line:#d6cfc7;--txt:#222;--mut:#6c6863;--c
   letter-spacing:.4px;
 }
 @media(max-width:600px){
-  .flight-time-grid{gap:6px}
+  .flight-time-grid{grid-template-columns:minmax(0,1fr) minmax(0,.82fr) minmax(0,1fr);gap:6px}
   .flight-time-card input[type="time"]{font-size:16px}
 }
 </style><style>
@@ -120,14 +120,9 @@ body:not(.light) .flight-time-card .time-box input[type=time]{color-scheme:dark}
 
 <section class="card"><h2>FLIGHT DATA · ALL TIMES UTC</h2>
 <div class="flight-time-grid">
-  <div class="flight-time-card">
-    <label>DEPARTURE · UTC</label>
-    <div class="time-box"><input id="dep" type="time" value="15:00"></div>
-  </div>
-  <div class="flight-time-card">
-    <label>ARRIVAL · UTC</label>
-    <div class="time-box"><input id="arr" type="time" value="01:00"></div>
-  </div>
+  <div class="flight-time-card"><label>DEPARTURE · UTC</label><div class="time-box"><input id="dep" type="time" value="15:00"></div></div>
+  <div class="flight-time-card"><label>FLIGHT TIME</label><div class="time-box"><input id="flightTime" type="time" value="10:00"></div></div>
+  <div class="flight-time-card"><label>ARRIVAL · UTC</label><div class="time-box"><input id="arr" type="time" value="01:00"></div></div>
 </div>
 <div style="height:10px"></div>
 <div class="modes">
@@ -164,7 +159,7 @@ body:not(.light) .flight-time-card .time-box input[type=time]{color-scheme:dark}
 </div>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),KEY="restPlannerV24";let plan=null;
+const $=id=>document.getElementById(id),KEY="restPlannerV25";let plan=null;
 const mins=v=>{let p=(v||"").split(":");return p.length===2?+p[0]*60 + +p[1]:NaN};
 const tm=x=>{x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
 const sf=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -207,10 +202,15 @@ return s.value==="CUSTOM"?(($("c"+i).value||"").trim()||"CUSTOM"):s.value;
 function applyTheme(){
 let light=localStorage.getItem("restThemeV8")==="light";document.body.classList.toggle("light",light);$("theme").textContent=light?"DARK":"LIGHT";
 }
+function durationMins(v){let p=(v||"").split(":");if(p.length!==2)return NaN;let h=+p[0],m=+p[1];return Number.isFinite(h)&&Number.isFinite(m)&&h>=0&&h<=23&&m>=0&&m<=59?h*60+m:NaN}
+function setTimeValue(id,x){$(id).value=tm(x)}
+function syncFromDuration(){let d=mins($("dep").value),f=durationMins($("flightTime").value);if(Number.isFinite(d)&&Number.isFinite(f))setTimeValue("arr",d+f)}
+function syncFromArrival(){let d=mins($("dep").value),a=mins($("arr").value);if(!Number.isFinite(d)||!Number.isFinite(a))return;let f=a-d;if(f<0)f+=1440;setTimeValue("flightTime",f)}
+function syncFromDeparture(){if($("flightTime").value)syncFromDuration();else syncFromArrival()}
 function calculate(){clearErr();let d=mins($("dep").value),a=mins($("arr").value),b=+$("before").value,g=+$("between").value,e=+$("after").value,n=+document.querySelector('input[name="pilots"]:checked').value===3?3:2,ids=[crewValue(1),crewValue(2),crewValue(3)];if(ids.some((x,i)=>i< (n) && (!x||x==="CUSTOM")))return err("ENTER A CUSTOM CREW NAME");if(!Number.isFinite(d)||!Number.isFinite(a)||[b,g,e].some(x=>!Number.isFinite(x)||x<0))return err("CHECK FLIGHT DATA");try{plan=build(d,a,n,b,g,e,ids);render();save();update()}catch(x){err(x.message)}}
 function render(){if(!plan||!plan.rests)return;$("durationLine").textContent="REST DURATION · "+fmtDur(plan.rest ?? plan.restMin ?? 0);$("rows").innerHTML=plan.rests.map((r,i)=>`<div class="row"><div class="p">${r.pilot}</div><div>${tm(r.start)}</div><div>${tm(r.end)}</div><div class="count" id="cnt${i}">--:--:--</div></div>`).join("");$("planbox").classList.remove("hidden");$("live").classList.remove("hidden")}
-function save(){localStorage.setItem(KEY,JSON.stringify({plan,dep:$("dep").value,arr:$("arr").value,b:$("before").value,g:$("between").value,e:$("after").value,pilots:[...document.querySelectorAll('input[name="pilots"]')].find(x=>x.checked)?.value||"3"}))}
-function load(){try{let s=JSON.parse(localStorage.getItem(KEY));if(!s)return;for(let k of ["dep","arr"])$(k).value=s[k]||$(k).value;$("before").value=s.b??30;$("between").value=s.g??15;$("after").value=s.e??30;if(s.pilots)document.querySelector('input[name="pilots"][value="'+s.pilots+'"]').checked=true;if(s.plan){plan=s.plan;render()}}catch(e){}}
+function save(){localStorage.setItem(KEY,JSON.stringify({plan,dep:$("dep").value,arr:$("arr").value,b:$("before").value,g:$("between").value,e:$("after").value,flightTime:$("flightTime").value,pilots:[...document.querySelectorAll('input[name="pilots"]')].find(x=>x.checked)?.value||"3"}))}
+function load(){try{let s=JSON.parse(localStorage.getItem(KEY));if(!s)return;for(let k of ["dep","arr"])$(k).value=s[k]||$(k).value;$("before").value=s.b??30;$("between").value=s.g??15;$("after").value=s.e??30;if(s.flightTime)$("flightTime").value=s.flightTime;if(s.pilots)document.querySelector('input[name="pilots"][value="'+s.pilots+'"]').checked=true;if(s.plan){plan=s.plan;render()}}catch(e){}}
 function utcMin(){let d=new Date();return d.getUTCHours()*60+d.getUTCMinutes()+d.getUTCSeconds()/60}
 function update(){if(!plan)return;let now=utcMin(),t=now,preDeparture=false;
 if(now<plan.dep){
@@ -225,7 +225,7 @@ if(preDeparture){let until=(plan.dep-now)*60;$("status").textContent="STANDBY";$
 else if(active>=0){let r=plan.rests[active];$("status").textContent="REST "+(active+1);$("pilot").textContent=r.pilot;$("clock").textContent=sf((r.end-t)*60);$("range").textContent=tm(r.start)+" — "+tm(r.end)+" UTC · "+fmtDur(r.end-r.start)+" REST";$("next").textContent=next>=0?"NEXT REST "+(next+1)+" · "+tm(plan.rests[next].start)+" UTC":""}
 else if(next>=0){let r=plan.rests[next];$("status").textContent="FLIGHT";$("pilot").textContent="NEXT REST "+r.pilot;$("clock").textContent=sf((r.start-t)*60);$("range").textContent=tm(r.start)+" — "+tm(r.end)+" UTC · "+fmtDur(r.end-r.start)+" REST";$("next").textContent=""}
 else{$("status").textContent="PLAN COMPLETE";$("pilot").textContent="";$("clock").textContent="00:00:00";$("range").textContent="";$("next").textContent=""}}
-$("calc").onclick=calculate;document.querySelectorAll('input[name="pilots"]').forEach(x=>x.addEventListener("change",()=>{setCrewMode();save()}));
+$("calc").onclick=calculate;$("flightTime").addEventListener("input",syncFromDuration);$("arr").addEventListener("input",syncFromArrival);$("dep").addEventListener("input",syncFromDeparture);document.querySelectorAll('input[name="pilots"]').forEach(x=>x.addEventListener("change",()=>{setCrewMode();save()}));
 document.addEventListener("change",e=>{if(e.target&&/^r[123]$/.test(e.target.id))toggleCustom(+e.target.id.slice(1));});$("theme").onclick=()=>{let light=document.body.classList.toggle("light");localStorage.setItem("restThemeV8",light?"light":"dark");$("theme").textContent=light?"DARK":"LIGHT";};try{load()}catch(e){plan=null}
 try{setCrewMode()}catch(e){}
 try{applyTheme()}catch(e){}
@@ -234,4 +234,4 @@ try{update()}catch(e){}
 setInterval(()=>{try{update()}catch(e){}},1000);
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
-</script><div id="appVersion">v24</div></body></html>
+</script><div id="appVersion">v25</div></body></html>
